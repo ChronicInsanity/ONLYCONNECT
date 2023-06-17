@@ -98,7 +98,7 @@ var LZString={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234
 		<div id="init-lacking"><p>Browser lacks capabilities required to play.</p><p>Upgrade or switch to another browser.</p></div>
 		<div id="init-loading"><div>Loading&hellip;</div></div>
 	</div>
-	<tw-storydata name="OnlyConnect Part 1" startnode="4" creator="Twine" creator-version="2.6.1" format="SugarCube" format-version="2.36.1" ifid="904BBFAB-DE12-4ADB-B47A-8FBD10DCB2FE" options="" tags="" zoom="0.6" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500&family=Roboto:wght@300&display=swap');
+	<tw-storydata name="OnlyConnect Part 1" startnode="14" creator="Twine" creator-version="2.6.1" format="SugarCube" format-version="2.36.1" ifid="904BBFAB-DE12-4ADB-B47A-8FBD10DCB2FE" options="" tags="" zoom="0.6" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500&family=Roboto:wght@300&display=swap');
 
 html, body {
   scroll-behavior:smooth;
@@ -989,19 +989,126 @@ Some details:
 &lt;&lt;/textChoices&gt;&gt;
 
 &lt;&lt;/chatScreen&gt;&gt;
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="5" name="Mary" tags="" position="498,594" size="100,100">//Mary: Hey, I need to take someone to a party. Yes, there&#39;s a free bar. 5 hours. Let me know.
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="5" name="Mary" tags="" position="498,594" size="100,100">&lt;&lt;nobr&gt;&gt;
+/*Here is a template for a chat screen, with text messages and the ability for players to make a choice.
 
-[[I love a party]]
-[[I&#39;m not a fan of parties]]//
+Some details:
 
-&lt;&lt;set $VisitedMary1 to true&gt;&gt;</tw-passagedata><tw-passagedata pid="6" name="Anna" tags="" position="1407,602" size="100,100">Mon 13:00
 
-//Anna: Hi, w/w/hl?//
+- The &lt;&lt;chatScreen&gt;&gt; macro has three parameters: 
+	- The name of the character you are chatting to;
+    - The URL for the hosted image of that character to display at the top of the chat. 
+    - The URL for the hosted image of the OC logo.
+- You place the content of the chat, including all messages and choices, inside this macro.
 
-//[[Ice skating in the park, 2.5 hrs?]]
-[[Drinks, Zanzibar, 2.5hrs?]]//
+=========================================
 
-&lt;&lt;set $VisitedAnna to true&gt;&gt;</tw-passagedata><tw-passagedata pid="7" name="Sure, does 3pm work?" tags="" position="0,798" size="100,100">You go clothes shopping with Jonathan. He&#39;s about 10 years older than you. You&#39;re strangely nervous to be seen with him, and take on the air of a professional stylist, advising him on waistbands and shades of blue that you know nothing about. He smiles shyly at you and always stands slightly too far away. You have to raise your voice slightly to tell him //yes, I think they’d suit you.//
+- There are two text message macros:
+
+	- The &lt;&lt;textMessageStatic&gt;&gt; allows you to place static, pre-existing messages on the screen when the Passage is loaded. It has the following two parameters:
+		- Whether it is a &quot;char&quot; (character text) or &quot;player&quot; (player text);
+    	- If it is character text, what that character&#39;s name is (just leave blank if a player text);
+    	- You can then write the content of the message inside the macro.
+
+- The &lt;&lt;textMessage&gt;&gt; macro adds new text messages to the screen after a delay. It works similarly to the &lt;&lt;textMessageStatic&gt;&gt; macro, with a couple of extra parameters:
+    - If it is a character text, how many seconds before the &#39;is typing...&#39; message appears (just write &quot;0s&quot; if a player text);
+    - How many seconds before the text itself appears.
+
+- These delays on all the &lt;&lt;textMessage&gt;&gt; macros are calculated from the moment that the Passage is loaded. You need to make sure that choreograph when all the texts arrive, and in what order, based on the number of seconds from the moment the Passage is loaded.
+
+========================================
+
+- The &lt;&lt;textChoices&gt;&gt; macro has only one parameter: the delay (from the moment the Screen is loaded) before it appears. The choices are written inside, as &lt;&lt;chatChoice&gt;&gt; macros .  There should be space for two choices maximum. 
+
+- The &lt;&lt;chatChoice&gt;&gt; macro has the following parameters:
+	- The Passage that clicking a choice goes to. If you do not want to immediately go to another Passage, just write &quot;&quot;.
+    - The variable, and its value, that you want to set by clicking this choice. Again, these two parameters are optional: if you don&#39;t want to set a variable, just write both as &quot;&quot;.
+    - You can also optionally have a message from the player display after the choice has been clicked. If you want this, write the content of the message in the parameter; otherwise, leave it as &quot;&quot;.
+    - The text of the choice button itself.
+    - A unique ID: should either be &quot;choice1&quot; or &quot;choice2&quot;.
+
+- If you don&#39;t want the choice to go to another Passage, you can optionally add more content inside the &lt;&lt;chatChoice&gt;&gt; macro, which will only display if that choice is clicked. This allows you to carry on a conversation between a player and a character depending on the player&#39;s choices. 
+*/
+
+&lt;&lt;chatScreen &quot;Tim&quot; &quot;http://bonfiredog.co.uk/resources/tim.png&quot; &quot;http://bonfiredog.co.uk/resources/oclogo.png&quot;&gt;&gt;
+
+&lt;&lt;textMessageStatic &quot;char&quot; &quot;Mary&quot;&gt;&gt;Hey, I need to take someone to a party. Yes, there&#39;s a free bar. 5 hours. Let me know.&lt;&lt;/textMessageStatic&gt;&gt;
+
+&lt;&lt;textChoices &quot;6s&quot;&gt;&gt;
+
+&lt;&lt;chatChoice &quot;I love a party&quot; &quot;$VisitedMary1&quot; &quot;true&quot; &quot;I love a party&quot; &quot;&#39;I love a party&#39;&quot; &quot;choice1&quot;&gt;&gt;
+&lt;&lt;/chatChoice&gt;&gt;
+
+&lt;&lt;chatChoice &quot;I&#39;m not a fan of parties&quot; &quot;$VisitedMary1&quot; &quot;true&quot; &quot;I&#39;m not a fan of parties&quot; &quot;&#39;I&#39;m not a fan of parties&#39;&quot; &quot;choice2&quot;&gt;&gt;
+&lt;&lt;textMessage &quot;char&quot; &quot;Mary&quot; &quot;1s&quot; &quot;2s&quot;&gt;&gt;Me neither.&lt;&lt;/textMessage&gt;&gt;
+&lt;&lt;/chatChoice&gt;&gt; 
+
+&lt;&lt;/textChoices&gt;&gt;
+
+&lt;&lt;/chatScreen&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="6" name="Anna" tags="" position="1407,602" size="100,100">&lt;&lt;nobr&gt;&gt;
+/*Here is a template for a chat screen, with text messages and the ability for players to make a choice.
+
+Some details:
+
+
+- The &lt;&lt;chatScreen&gt;&gt; macro has three parameters: 
+	- The name of the character you are chatting to;
+    - The URL for the hosted image of that character to display at the top of the chat. 
+    - The URL for the hosted image of the OC logo.
+- You place the content of the chat, including all messages and choices, inside this macro.
+
+=========================================
+
+- There are two text message macros:
+
+	- The &lt;&lt;textMessageStatic&gt;&gt; allows you to place static, pre-existing messages on the screen when the Passage is loaded. It has the following two parameters:
+		- Whether it is a &quot;char&quot; (character text) or &quot;player&quot; (player text);
+    	- If it is character text, what that character&#39;s name is (just leave blank if a player text);
+    	- You can then write the content of the message inside the macro.
+
+- The &lt;&lt;textMessage&gt;&gt; macro adds new text messages to the screen after a delay. It works similarly to the &lt;&lt;textMessageStatic&gt;&gt; macro, with a couple of extra parameters:
+    - If it is a character text, how many seconds before the &#39;is typing...&#39; message appears (just write &quot;0s&quot; if a player text);
+    - How many seconds before the text itself appears.
+
+- These delays on all the &lt;&lt;textMessage&gt;&gt; macros are calculated from the moment that the Passage is loaded. You need to make sure that choreograph when all the texts arrive, and in what order, based on the number of seconds from the moment the Passage is loaded.
+
+========================================
+
+- The &lt;&lt;textChoices&gt;&gt; macro has only one parameter: the delay (from the moment the Screen is loaded) before it appears. The choices are written inside, as &lt;&lt;chatChoice&gt;&gt; macros .  There should be space for two choices maximum. 
+
+- The &lt;&lt;chatChoice&gt;&gt; macro has the following parameters:
+	- The Passage that clicking a choice goes to. If you do not want to immediately go to another Passage, just write &quot;&quot;.
+    - The variable, and its value, that you want to set by clicking this choice. Again, these two parameters are optional: if you don&#39;t want to set a variable, just write both as &quot;&quot;.
+    - You can also optionally have a message from the player display after the choice has been clicked. If you want this, write the content of the message in the parameter; otherwise, leave it as &quot;&quot;.
+    - The text of the choice button itself.
+    - A unique ID: should either be &quot;choice1&quot; or &quot;choice2&quot;.
+
+- If you don&#39;t want the choice to go to another Passage, you can optionally add more content inside the &lt;&lt;chatChoice&gt;&gt; macro, which will only display if that choice is clicked. This allows you to carry on a conversation between a player and a character depending on the player&#39;s choices. 
+*/
+
+&lt;&lt;chatScreen &quot;Tim&quot; &quot;http://bonfiredog.co.uk/resources/tim.png&quot; &quot;http://bonfiredog.co.uk/resources/oclogo.png&quot;&gt;&gt;
+
+&lt;&lt;textMessageStatic &quot;char&quot; &quot;Anna&quot;&gt;&gt;Hi, w/w/hl?&lt;&lt;/textMessageStatic&gt;&gt;
+
+&lt;&lt;textChoices &quot;3s&quot;&gt;&gt;
+
+&lt;&lt;chatChoice &quot;Ice skating in the park, 2.5 hrs?&quot; &quot;$VisitedAnna&quot; &quot;true&quot; &quot;Ice skating in the park, 2.5 hrs?&quot; &quot;&#39;Ice skating in the park, 2.5 hrs?&#39;&quot; &quot;choice1&quot;&gt;&gt;
+&lt;&lt;textMessage &quot;char&quot; &quot;Anna&quot; &quot;1s&quot; &quot;2s&quot;&gt;&gt;Sure - just so you know, I charge activities (eg. skating) on top. That OK?&lt;&lt;/textMessage&gt;&gt;
+&lt;&lt;textMessage &quot;player&quot; &quot;&quot; &quot;3s&quot; &quot;4s&quot;&gt;&gt;yeah, no worries – tomorrow 8pm?&lt;&lt;/textMessage&gt;&gt;
+&lt;&lt;textMessage &quot;char&quot; &quot;Anna&quot; &quot;5s&quot; &quot;6s&quot;&gt;&gt;I’m free, see you then.&lt;&lt;/textMessage&gt;&gt;
+&lt;&lt;/chatChoice&gt;&gt; 
+
+&lt;&lt;chatChoice &quot;Drinks, Zanzibar, 2.5hrs?&quot; &quot;$VisitedAnna&quot; &quot;true&quot; &quot;Drinks, Zanzibar, 2.5hrs?&quot; &quot;&#39;Drinks, Zanzibar, 2.5hrs?&#39;&quot; &quot;choice2&quot;&gt;&gt;
+&lt;&lt;textMessage &quot;char&quot; &quot;Anna&quot; &quot;1s&quot; &quot;2s&quot;&gt;&gt;Sure - just so you know, I charge activities (eg. skating) on top. That OK?&lt;&lt;/textMessage&gt;&gt;
+&lt;&lt;textMessage &quot;player&quot; &quot;&quot; &quot;3s&quot; &quot;4s&quot;&gt;&gt;yeah, no worries – tomorrow 8pm?&lt;&lt;/textMessage&gt;&gt;
+&lt;&lt;textMessage &quot;char&quot; &quot;Anna&quot; &quot;5s&quot; &quot;6s&quot;&gt;&gt;I’m free, see you then.&lt;&lt;/textMessage&gt;&gt;
+&lt;&lt;/chatChoice&gt;&gt;
+
+&lt;&lt;/textChoices&gt;&gt;
+
+&lt;&lt;/chatScreen&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="7" name="Sure, does 3pm work?" tags="" position="0,798" size="100,100">You go clothes shopping with Jonathan. He&#39;s about 10 years older than you. You&#39;re strangely nervous to be seen with him, and take on the air of a professional stylist, advising him on waistbands and shades of blue that you know nothing about. He smiles shyly at you and always stands slightly too far away. You have to raise your voice slightly to tell him //yes, I think they’d suit you.//
 
 It’s sort of horrible and sort of nice, for both of you to be so awkward at once.
 
@@ -1044,11 +1151,7 @@ You go home and lie on your side on the bathroom floor for twenty minutes. Then 
 
 &lt;&lt;set $VisitedMary2 to true&gt;&gt;
 
-</tw-passagedata><tw-passagedata pid="12" name="Ice skating in the park, 2.5 hrs?" tags="" position="1126,692.6666666666666" size="100,100">//Anna: Sure - just so you know, I charge activities (eg. skating) on top. That OK?
-$player_name: yeah, no worries – tomorrow 8pm?
-Anna: I’m free, see you then.//
-
-It’s your birthday tomorrow. You’d rung Jamie and Ella but they’re working. Your cousin didn’t pick up. Jo said she was short on time so you’d have to make it up to her by attending a christening, and there’s something about seeing a baby’s head underwater that always makes you feel sick. There are other numbers on your phone, but you know it would be weird. They’re either too distant to spend a birthday with, or there’s a chance they’d ask you to pay them.
+</tw-passagedata><tw-passagedata pid="12" name="Ice skating in the park, 2.5 hrs?" tags="" position="1126,692.6666666666666" size="100,100">It’s your birthday tomorrow. You’d rung Jamie and Ella but they’re working. Your cousin didn’t pick up. Jo said she was short on time so you’d have to make it up to her by attending a christening, and there’s something about seeing a baby’s head underwater that always makes you feel sick. There are other numbers on your phone, but you know it would be weird. They’re either too distant to spend a birthday with, or there’s a chance they’d ask you to pay them.
 
 What you’d really like to do for your birthday is &lt;&lt;textbox &quot;$BirthdayDream&quot; &quot;&quot;&gt;&gt;
 
@@ -1057,11 +1160,7 @@ What you’d really like to do for your birthday is &lt;&lt;textbox &quot;$Birth
 &lt;&lt;button -&gt; &gt;&gt;&lt;&lt;if $BirthdayDream isnot &quot;&quot;&gt;&gt;&gt;&lt;&lt;goto BirthdayDream&gt;&gt;&lt;&lt;/if&gt;&gt;&lt;&lt;if $BirthdayDream is &quot;&quot;&gt;&gt;&lt;&lt;replace #text&gt;&gt;Complete the text box.&lt;&lt;/replace&gt;&gt;&lt;&lt;/if&gt;&gt;&lt;&lt;/button&gt;&gt;
 
 
-&lt;&lt;set $VisitedSkating to true&gt;&gt;</tw-passagedata><tw-passagedata pid="13" name="Drinks, Zanzibar, 2.5hrs?" tags="" position="1735.6666666666667,698.3333333333334" size="100,100">//Anna: Sure - just so you know, I charge activities (eg. drinks) on top. That OK?
-$player_name: yeah, no worries – tomorrow, 8pm?
-Anna: I’m free, see you then.//
-
-It’s your birthday tomorrow. You’d rung Jamie and Ella but they’re working. Your cousin didn’t pick up. Jo said she was short on time so you’d have to make it up to her by attending a christening, and there’s something about seeing a baby’s head underwater that always makes you feel sick. There are other numbers on your phone, but you know it would be weird. They’re either too distant to spend a birthday with, or there’s a chance they’d ask you to pay them.
+&lt;&lt;set $VisitedSkating to true&gt;&gt;</tw-passagedata><tw-passagedata pid="13" name="Drinks, Zanzibar, 2.5hrs?" tags="" position="1735.6666666666667,698.3333333333334" size="100,100">It’s your birthday tomorrow. You’d rung Jamie and Ella but they’re working. Your cousin didn’t pick up. Jo said she was short on time so you’d have to make it up to her by attending a christening, and there’s something about seeing a baby’s head underwater that always makes you feel sick. There are other numbers on your phone, but you know it would be weird. They’re either too distant to spend a birthday with, or there’s a chance they’d ask you to pay them.
 
 What you’d really like to do for your birthday is &lt;&lt;textbox &quot;$BirthdayDream&quot; &quot;&quot;&gt;&gt;
 &lt;span id=&quot;text&quot;&gt;&lt;/span&gt;
